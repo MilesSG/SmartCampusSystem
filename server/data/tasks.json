@@ -1,0 +1,42 @@
+{
+  "tasks": [
+    {
+      "id": "2",
+      "title": "图书馆整理",
+      "description": "整理图书馆新到图书",
+      "creator": {
+        "name": "管理员",
+        "username": "admin"
+      },
+      "status": "in-progress",
+      "priority": "medium",
+      "deadline": "2024-02-02T16:00:00.000Z",
+      "location": {
+        "building": "图书馆",
+        "coordinates": {
+          "lat": 39.9042,
+          "lng": 116.4074
+        }
+      }
+    },
+    {
+      "id": "1736776771249",
+      "title": "test",
+      "description": "testtesttesttest",
+      "priority": "low",
+      "deadline": "2025-01-13T13:58:17.633Z",
+      "location": {
+        "building": "icepy-clone",
+        "coordinates": {
+          "lat": 0,
+          "lng": 0
+        }
+      },
+      "creator": {
+        "name": "管理员",
+        "username": "admin"
+      },
+      "createdAt": "2025-01-13T13:59:31.249Z"
+    }
+  ]
+}
