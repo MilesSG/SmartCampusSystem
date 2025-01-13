@@ -9,8 +9,8 @@
   - 支持缩放、平移等操作
   - 自定义地图标记和图标
 
-- 🛣️ **智能路径规划**
-  - 基于真实道路网络的路径计算
+- ��️ **智能路径规划**
+  - 基于 OSRM 引擎的实时路径规划
   - 实时距离和时间估算
   - 平滑的路径动画效果
   - 自动路径优化
@@ -43,6 +43,54 @@
 - 🚀 **Node.js** - 服务器运行环境
 - 📁 **JSON** - 数据存储
 - 🛣️ **OSRM** - 路径规划服务
+
+## OSRM 路径规划算法说明 🗺️
+
+本项目使用 OSRM（Open Source Routing Machine）作为核心路径规划引擎。OSRM 是一个高性能的路径规划引擎，其核心算法和特点如下：
+
+### 1. 核心算法
+- **Contraction Hierarchies (CH)**: 
+  - 一种层次化的图压缩算法
+  - 通过预处理创建路网的层次结构
+  - 显著提高查询效率
+  - 支持双向搜索策略
+
+- **Multi-Level Dijkstra**:
+  - 基于层次化的 Dijkstra 算法变体
+  - 在压缩的图层次上进行路径搜索
+  - 比传统 Dijkstra 算法更快
+  - 保证最短路径的准确性
+
+### 2. 关键特性
+- **预处理优化**:
+  - 对路网数据进行预处理
+  - 创建层次化的数据结构
+  - 生成快速访问索引
+  - 优化查询性能
+
+- **实时路径计算**:
+  - 毫秒级的响应时间
+  - 支持实时交通数据
+  - 动态路径更新
+  - 多种交通方式支持
+
+### 3. 项目实现
+```typescript
+// OSRM API 调用示例
+async function getRoutePath(start: [number, number], end: [number, number]) {
+  const response = await fetch(
+    `https://router.project-osrm.org/route/v1/foot/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`
+  );
+  const data = await response.json();
+  return data.routes[0].geometry.coordinates;
+}
+```
+
+### 4. 性能优势
+- 相比传统 Dijkstra 算法，速度提升 100-1000 倍
+- 支持大规模路网数据
+- 内存占用优化
+- 适合实时应用场景
 
 ## 快速开始 🚀
 
@@ -101,16 +149,19 @@ SmartCampusSystem/
    - 使用 OSRM 服务进行实际道路路径规划
    - 支持步行路径优化
    - 实时距离计算
+   - 基于 Contraction Hierarchies 的高效路径搜索
 
 2. **可视化效果**
    - 平滑的路径动画
    - 起点/终点标记动画
    - 路径发光效果
+   - 自适应缩放视图
 
 3. **交互方式**
    - 点击地图选择起点和终点
    - 实时显示距离和时间估算
    - 支持路径重置
+   - 路径动画控制
 
 ## 贡献指南 🤝
 
