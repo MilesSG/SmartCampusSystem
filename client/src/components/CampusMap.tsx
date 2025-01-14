@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import { Icon, LatLng, LeafletMouseEvent, DivIcon } from 'leaflet';
 import L from 'leaflet';
-import { Box, Card, CardContent, Typography, Button, Stack, Chip, Fade } from '@mui/material';
-import { DirectionsWalk, Timer, Straighten, Clear, MyLocation } from '@mui/icons-material';
+import { Box, Card, CardContent, Typography, Button, Stack, Chip, Fade, Snackbar, Alert } from '@mui/material';
+import { DirectionsWalk, Timer, Straighten, Clear, MyLocation, PinDrop } from '@mui/icons-material';
 import * as turf from '@turf/turf';
 import 'leaflet-ant-path';
 import 'leaflet/dist/leaflet.css';
@@ -79,8 +79,8 @@ const AnimatedPath: React.FC<{
       delay: 800,
       dashArray: [10, 20],
       weight: 5,
-      color: '#1976d2',
-      pulseColor: '#64b5f6',
+      color: '#39FF14',
+      pulseColor: '#7FFF00',
       paused: false,
       reverse: false,
       hardwareAccelerated: true
@@ -88,7 +88,7 @@ const AnimatedPath: React.FC<{
 
     // 添加发光效果
     const glowPath = L.polyline(positions, {
-      color: '#1976d2',
+      color: '#39FF14',
       weight: 8,
       opacity: 0.3
     }).addTo(map);
@@ -125,7 +125,8 @@ const PathControls: React.FC<{
   onClear: () => void;
   pathInfo: { distance: number; time: number } | null;
   isAnimating: boolean;
-}> = ({ onClear, pathInfo, isAnimating }) => {
+  markers: [number, number][];
+}> = ({ onClear, pathInfo, isAnimating, markers }) => {
   return (
     <Card sx={{ 
       position: 'absolute', 
@@ -153,9 +154,21 @@ const PathControls: React.FC<{
             清除
           </Button>
         </Stack>
-        <Typography variant="body2" color="text.secondary" gutterBottom>
-          点击地图放置起点和终点标记
-        </Typography>
+        <Stack spacing={1}>
+          <Typography variant="body2" color="text.secondary" sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}>
+            <PinDrop fontSize="small" color="primary" />
+            点击地图放置起点和终点标记
+          </Typography>
+          {markers?.length === 1 && (
+            <Typography variant="body2" color="success.main">
+              请点击地图选择终点位置
+            </Typography>
+          )}
+        </Stack>
         <Fade in={!!pathInfo}>
           <Stack direction="row" spacing={1} mt={2}>
             <Chip
@@ -182,6 +195,7 @@ const CampusMap: React.FC = () => {
   const [path, setPath] = useState<[number, number][]>([]);
   const [pathInfo, setPathInfo] = useState<{ distance: number; time: number } | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(true);
 
   const handleMapClick = useCallback(async (e: LeafletMouseEvent) => {
     if (isAnimating) return;
@@ -254,10 +268,40 @@ const CampusMap: React.FC = () => {
         )}
         <MapClickHandler onMapClick={handleMapClick} />
       </MapContainer>
+      
+      {/* 左上角提示框 */}
+      <Card sx={{ 
+        position: 'absolute', 
+        top: 10, 
+        left: 10, 
+        zIndex: 1000,
+        width: 300,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backdropFilter: 'blur(10px)',
+        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+        border: '1px solid rgba(255, 255, 255, 0.3)',
+        display: markers.length === 2 ? 'none' : 'block'
+      }}>
+        <CardContent>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <PinDrop color="primary" />
+            <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+              路径规划
+            </Typography>
+          </Stack>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            {markers.length === 0 
+              ? "点击地图任意位置放置起点标记"
+              : "请点击地图选择终点位置"}
+          </Typography>
+        </CardContent>
+      </Card>
+
       <PathControls 
         onClear={handleClear} 
         pathInfo={pathInfo}
         isAnimating={isAnimating}
+        markers={markers}
       />
     </Box>
   );
