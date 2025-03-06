@@ -1,176 +1,155 @@
-# 智慧校园系统 (Smart Campus System) 🏫
+# 智慧校园系统
 
-一个现代化的智慧校园管理系统，提供校园地图、路径规划、任务管理等功能。
+基于WebGIS的智慧校园系统设计与开发，为校园提供地图可视化、建筑管理、用户管理等功能。
 
-## 功能特点 ✨
+![统运行截图](client/imgs/image.png)
 
-- 🗺️ **交互式校园地图**
-  - 基于 OpenStreetMap 的实时地图显示
-  - 支持缩放、平移等操作
-  - 自定义地图标记和图标
+## 项目特点
 
-- 🚗 **智能路径规划**
-  - 基于 OSRM 引擎的实时路径规划
-  - 实时距离和时间估算
-  - 平滑的路径动画效果
-  - 自动路径优化
+- 前后端分离架构，前端使用React，后端使用Node.js
+- 基于本地JSON文件的数据存储，无需安装配置数据库
+- 响应式设计，支持多种设备访问
+- WebGIS地图可视化，便于校园导航与设施查询
+- 完善的用户认证和权限管理
+- 支持建筑物管理与地理位置搜索
 
-- 📋 **任务管理系统**
-  - 创建和管理校园任务
-  - 任务优先级设置
-  - 任务状态追踪
-  - 任务位置关联
-
-- 💫 **现代化 UI/UX**
-  - Material-UI 设计语言
-  - 响应式布局
-  - 流畅动画效果
-  - 直观的用户界面
-
-## 技术栈 🛠️
+## 技术栈
 
 ### 前端
-- ⚛️ **React** (v18.2.0) - 用户界面构建
-- 📦 **TypeScript** (v4.9.5) - 类型安全和开发效率
-- 🎨 **Material-UI** (v5.15.3) - UI 组件库
-- 🗺️ **Leaflet** (v1.9.4) - 地图交互
-  - react-leaflet (v4.2.1)
-  - leaflet-ant-path (v1.3.0) - 路径动画效果
-- 📐 **Turf.js** (v7.2.0) - 地理空间分析
-- 🔄 **Axios** (v1.6.5) - HTTP 请求
+- React + TypeScript
+- Material UI 组件库
+- Axios 网络请求
+- WebGIS 地图组件
 
 ### 后端
-- 🚀 **Node.js** - 服务器运行环境
-- 📁 **JSON** - 数据存储
-- 🛣️ **OSRM** - 路径规划服务
+- Node.js + Express
+- JWT 身份验证
+- 本地JSON文件数据存储
+- RESTful API 设计
 
-## OSRM 路径规划算法说明 🗺️
+## 系统功能
 
-本项目使用 OSRM（Open Source Routing Machine）作为核心路径规划引擎。OSRM 是一个高性能的路径规划引擎，其核心算法和特点如下：
+- **用户管理**：用户注册、登录、权限管理
+- **建筑管理**：添加、编辑、删除校园建筑
+- **地图导航**：校园地图可视化与导航
+- **任务系统**：校园任务创建与管理
+- **公告管理**：校园公告发布与展示
 
-### 1. 核心算法
-- **Contraction Hierarchies (CH)**: 
-  - 一种层次化的图压缩算法
-  - 通过预处理创建路网的层次结构
-  - 显著提高查询效率
-  - 支持双向搜索策略
+## 系统特色
 
-- **Multi-Level Dijkstra**:
-  - 基于层次化的 Dijkstra 算法变体
-  - 在压缩的图层次上进行路径搜索
-  - 比传统 Dijkstra 算法更快
-  - 保证最短路径的准确性
+### 本地数据存储
+系统采用本地JSON文件存储数据，无需安装配置数据库，便于部署和迁移：
+- 用户数据存储在 `server/data/users.json`
+- 建筑数据存储在 `server/data/buildings.json`
+- 任务数据存储在 `server/data/tasks.json`
 
-### 2. 关键特性
-- **预处理优化**:
-  - 对路网数据进行预处理
-  - 创建层次化的数据结构
-  - 生成快速访问索引
-  - 优化查询性能
+### 用户角色与权限
+- **管理员**：拥有系统所有权限，包括用户管理、建筑管理
+- **教师**：可以创建和管理任务
+- **学生**：可以查看地图和完成任务
 
-- **实时路径计算**:
-  - 毫秒级的响应时间
-  - 支持实时交通数据
-  - 动态路径更新
-  - 多种交通方式支持
+## 安装与运行
 
-### 3. 项目实现
-```typescript
-// OSRM API 调用示例
-async function getRoutePath(start: [number, number], end: [number, number]) {
-  const response = await fetch(
-    `https://router.project-osrm.org/route/v1/foot/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`
-  );
-  const data = await response.json();
-  return data.routes[0].geometry.coordinates;
-}
+### 环境要求
+- Node.js 16.x 或更高版本
+- npm 8.x 或更高版本
+
+### 安装步骤
+
+1. 克隆仓库
 ```
-
-### 4. 性能优势
-- 相比传统 Dijkstra 算法，速度提升 100-1000 倍
-- 支持大规模路网数据
-- 内存占用优化
-- 适合实时应用场景
-
-## 快速开始 🚀
-
-1. **克隆项目**
-```bash
-git clone https://github.com/MilesSG/SmartCampusSystem.git
+git clone https://github.com/yourusername/SmartCampusSystem.git
 cd SmartCampusSystem
 ```
 
-2. **安装依赖**
-```bash
-# 安装前端依赖
-cd client
-npm install
-
+2. 安装依赖
+```
 # 安装后端依赖
-cd ../server
+cd server
+npm install
+
+# 安装前端依赖
+cd ../client
 npm install
 ```
 
-3. **启动服务**
-```bash
-# 启动前端服务
-cd client
-npm start
-
-# 启动后端服务
+3. 初始化管理员账户
+```
 cd ../server
+node init/initAdmin.js
+```
+初始管理员账户信息：
+- 用户名：admin
+- 密码：admin123
+
+4. 启动服务
+```
+# 启动后端服务（在server目录下）
+npm start
+
+# 启动前端服务（在client目录下）
+cd ../client
 npm start
 ```
 
-4. **访问应用**
-打开浏览器访问 http://localhost:3000
+5. 访问系统
+在浏览器中打开 http://localhost:3000 访问系统
 
-## 项目结构 📁
+## 部署到其他机器
 
-```
-SmartCampusSystem/
-├── client/                 # 前端代码
-│   ├── src/
-│   │   ├── components/    # React 组件
-│   │   ├── styles/       # 样式文件
-│   │   └── App.tsx       # 主应用组件
-│   └── package.json
-├── server/                # 后端代码
-│   ├── data/            # JSON 数据存储
-│   └── index.js         # 服务器入口
-└── README.md
-```
+由于采用本地JSON文件存储数据，系统部署非常简便：
 
-## 路径规划功能说明 🗺️
+1. 复制整个项目目录到目标机器
+2. 安装Node.js环境
+3. 安装依赖
+4. 启动服务
 
-系统使用了多个先进技术来实现精确的路径规划：
+数据文件会自动在 `server/data` 目录中创建，也可以手动复制现有数据文件。
 
-1. **路径计算**
-   - 使用 OSRM 服务进行实际道路路径规划
-   - 支持步行路径优化
-   - 实时距离计算
-   - 基于 Contraction Hierarchies 的高效路径搜索
+## 功能使用指南
 
-2. **可视化效果**
-   - 平滑的路径动画
-   - 起点/终点标记动画
-   - 路径发光效果
-   - 自适应缩放视图
+### 1. 用户管理
 
-3. **交互方式**
-   - 点击地图选择起点和终点
-   - 实时显示距离和时间估算
-   - 支持路径重置
-   - 路径动画控制
+管理员可以通过"用户管理"页面创建和管理用户：
+- 添加新用户：点击"添加用户"按钮
+- 编辑用户：点击用户列表中的编辑图标
+- 删除用户：点击用户列表中的删除图标
 
-## 贡献指南 🤝
+### 2. 建筑管理
 
-欢迎提交 Pull Request 或创建 Issue！
+管理员可以通过"建筑管理"页面管理校园建筑：
+- 添加建筑：点击"添加建筑"按钮，填写建筑信息
+- 编辑建筑：点击建筑列表中的编辑图标
+- 删除建筑：点击建筑列表中的删除图标
 
-## 许可证 📄
+### 3. 地图导航
 
-MIT License - 查看 [LICENSE](LICENSE) 文件了解更多详情。
+所有用户可以通过地图页面查看校园地图：
+- 查看建筑：点击地图上的建筑图标
+- 搜索建筑：使用搜索框查找建筑
+- 查看建筑详情：点击建筑标记查看详细信息
 
-## 联系方式 📧
+### 4. 任务管理
 
-- GitHub: [@MilesSG](https://github.com/MilesSG) 
+教师和管理员可以创建和分配任务：
+- 创建任务：点击任务页面右下角的"+"按钮
+- 查看任务列表：访问"任务管理"页面
+- 更新任务状态：点击任务卡片上的状态按钮
+
+## 数据备份与恢复
+
+系统所有数据存储在 `server/data` 目录下的JSON文件中：
+
+1. 备份数据：只需复制 `server/data` 目录
+2. 恢复数据：将备份的文件复制到新系统的 `server/data` 目录
+
+## 注意事项
+
+1. **安全性**：生产环境部署时，务必修改默认管理员密码
+2. **性能**：本地JSON存储适合中小规模应用，大规模应用可能需考虑迁移至数据库
+3. **并发处理**：当前实现不适合高并发环境
+4. **地图配置**：根据实际校园地图更新地图配置文件
+
+## 技术支持与贡献
+
+如有问题或建议，请提交Issue或Pull Request。

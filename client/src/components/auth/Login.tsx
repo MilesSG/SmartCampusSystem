@@ -6,15 +6,22 @@ import {
   Typography,
   Container,
   Paper,
-  Alert
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton
 } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import axios from 'axios';
 
 interface LoginProps {
   onLogin: (userData: any) => void;
+  onClose: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC<LoginProps> = ({ onLogin, onClose }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -29,16 +36,23 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       onLogin(response.data);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || '登录失败');
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
-        <Typography component="h1" variant="h5" align="center">
-          登录
-        </Typography>
+    <Dialog open={true} onClose={onClose} maxWidth="xs" fullWidth>
+      <DialogTitle>
+        登录
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{ position: 'absolute', right: 8, top: 8 }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           <TextField
@@ -61,17 +75,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            登录
-          </Button>
         </Box>
-      </Paper>
-    </Container>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>取消</Button>
+        <Button onClick={handleSubmit} variant="contained">登录</Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
